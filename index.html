@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiffStudio - Revolutionizing eCommerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6B7280, #1F2937);
+        }
+    </style>
+</head>
+<body class="font-poppins text-white gradient-bg min-h-screen">
+    <header class="fixed w-full z-50 glass-effect py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="logo">
+                <img src="/images/logo.png" alt="DiffStudio Logo" class="h-10">
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="hover:text-indigo-300 transition">Home</a>
+                <a href="#about" class="hover:text-indigo-300 transition">About</a>
+                <a href="#features" class="hover:text-indigo-300 transition">Features</a>
+                <a href="#contact" class="hover:text-indigo-300 transition">Contact</a>
+            </nav>
+            <button class="md:hidden text-2xl">☰</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="min-h-screen flex items-center justify-center pt-20">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">Transform Commerce with DiffStudio</h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">Experience the future of online shopping with cutting-edge 3D scanning technology.</p>
+                <a href="#contact" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full transition">Get Started</a>
+            </div>
+        </section>
+
+        <section id="about" class="justify-center py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-semibold mb-6">Our Mission</h2>
+                <div class="max-w-2xl mx-auto">
+                    <p class="text-lg mb-4">At DiffStudio, we're revolutionizing eCommerce by empowering businesses with immersive 3D product experiences that boost engagement and sales.</p>
+                    <p class="text-lg">Using Gaussian splatting technology, we create stunning, interactive displays that reduce returns and elevate conversions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-20 bg-gray-900/50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-semibold text-center mb-12">Why DiffStudio?</h2>
+                <div id="feature-cards" class="grid md:grid-cols-3 gap-8"></div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-semibold mb-6">Ready to Join Us?</h2>
+                <p class="text-lg mb-8 max-w-xl mx-auto">Contact us to see how DiffStudio can transform your product displays.</p>
+                <form id="contactForm" class="max-w-md mx-auto glass-effect p-6 rounded-lg">
+                    <input type="text" placeholder="Name" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required>
+                    <input type="email" placeholder="Email" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required>
+                    <textarea placeholder="Message" rows="4" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required></textarea>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full transition">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-10 text-center glass-effect">
+        <p>&copy; 2025 DiffStudio. All rights reserved.</p>
+    </footer>
+
+    <script type="text/babel">
+        const features = [
+            { icon: "fas fa-cube", title: "Advanced 3D Scanning", desc: "High-quality 3D models with Gaussian splatting." },
+            { icon: "fas fa-mobile-alt", title: "User-Friendly", desc: "Intuitive interface for seamless scanning." },
+            { icon: "fas fa-chart-line", title: "High Impact", desc: "Boost engagement with interactive displays." }
+        ];
+
+        function FeatureCard({ feature }) {
+            return (
+                <div className="p-8 glass-effect rounded-lg hover:scale-105 transition flex flex-col items-center text-center">
+                    <i className={`${feature.icon} text-5xl text-indigo-400 mb-6`}></i>
+                    <h3 className="text-2xl font-semibold mb-3">{feature.title}</h3>
+                    <p className="text-base">{feature.desc}</p>
+                </div>
+            );
+        }
+
+        function FeatureList() {
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {features.map((feature, index) => (
+                        <FeatureCard key={index} feature={feature} />
+                    ))}
+                </div>
+            );
+        }
+
+        // Replace ReactDOM.render with createRoot
+        const root = ReactDOM.createRoot(document.getElementById('feature-cards'));
+        root.render(<FeatureList />);
+
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const form = e.target;
+            const name = form.querySelector('input[type="text"]').value;
+            const email = form.querySelector('input[type="email"]').value;
+            const message = form.querySelector('textarea').value;
+            
+            // Simple validation
+            if (!name || !email || !message) {
+                alert('Please fill out all fields');
+                return;
+            }
+            
+            // Show loading state
+            const button = form.querySelector('button');
+            const originalText = button.textContent;
+            button.textContent = 'Sending...';
+            button.disabled = true;
+            
+            // Simulate API call (replace with actual API call)
+            setTimeout(() => {
+                console.log('Form submitted with:', { name, email, message });
+                alert(`Thank you ${name} for contacting us! We'll get back to you soon.`);
+                form.reset();
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
