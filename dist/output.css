@@ -637,20 +637,12 @@ video {
   display: none;
 }
 
-.h-16 {
-  height: 4rem;
+.h-24 {
+  height: 6rem;
 }
 
 .h-full {
   height: 100%;
-}
-
-.h-20 {
-  height: 5rem;
-}
-
-.h-24 {
-  height: 6rem;
 }
 
 .min-h-screen {
@@ -868,14 +860,14 @@ video {
 }
 
 .glass-effect {
-  background: rgba(00, 00, 00, 0.4);
+  background: rgba(0, 0, 0, 0.4);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .gradient-bg {
-  background: #000000;
+  background: radial-gradient(circle at center, #3f2e74 0%, #438eb5 30%, #78c3af 60%, #000000 100%);
 }
 
 .hover\:scale-105:hover {

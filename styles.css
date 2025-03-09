@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .glass-effect {
-    background: rgba(00, 00, 00, 0.4);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .gradient-bg {
-    background: #000000;  
+    background: radial-gradient(circle at center, #3f2e74 0%, #438eb5 30%, #78c3af 60%, #000000 100%);
 }
