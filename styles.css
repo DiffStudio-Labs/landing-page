@@ -3,19 +3,18 @@
 @tailwind utilities;
 
 .glass-effect {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
-
 .gradient-bg {
-    background: linear-gradient(
-        150deg,
-        #78c3af 0%,    /* Teal */
-        #438eb5 20%,   /* Blue */
-        #f3b062 40%,   /* Light orange */
-        #ef8c49 60%,   /* Warm orange */
-        #e53b55 80%,   /* Bright red */
-        #4b3478 100%   /* Deep purple */
+    background: radial-gradient(
+        circle,
+        #4b3478 0%,   /* Deep purple */
+        #e53b55 20%,  /* Bright red */
+        #ef8c49 40%,  /* Warm orange */
+        #f3b062 60%,  /* Light orange */
+        #438eb5 80%,  /* Blue */
+        #78c3af 100%  /* Teal */
     );
 }
