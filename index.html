@@ -8,6 +8,7 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -120,27 +121,64 @@
         const root = ReactDOM.createRoot(document.getElementById('feature-cards'));
         root.render(<FeatureList />);
 
+        (function() {
+            emailjs.init("yXW6dOUMMhBYkTH05"); 
+        })();
+
         document.getElementById('contactForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const form = e.target;
-            const name = form.querySelector('input[type="text"]').value;
-            const email = form.querySelector('input[type="email"]').value;
-            const message = form.querySelector('textarea').value;
+            const name = form.querySelector('input[type="text"]').value.trim();
+            const email = form.querySelector('input[type="email"]').value.trim();
+            const message = form.querySelector('textarea').value.trim();
+
+            // Enhanced validation
             if (!name || !email || !message) {
                 alert('Please fill out all fields');
                 return;
             }
+
+            // Name validation
+            if (name.length < 2) {
+                alert('Name must be at least 2 characters long');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            // Message validation
+            if (message.length < 10) {
+                alert('Message must be at least 10 characters long');
+                return;
+            }
+
             const button = form.querySelector('button');
             const originalText = button.textContent;
             button.textContent = 'Sending...';
             button.disabled = true;
-            setTimeout(() => {
-                console.log('Form submitted with:', { name, email, message });
+
+            emailjs.send("service_5jj1zzu", "template_2g033mt", {
+                from_name: name,     // Maps to {{from_name}} in the template
+                email: email,        // Maps to {{email}} in the template
+                message: message,    // Maps to {{message}} in the template
+                to_name: "DiffStudio"  // Maps to {{to_name}} in the template
+            })
+            .then(() => {
                 alert(`Thank you ${name} for contacting us! We'll get back to you soon.`);
                 form.reset();
                 button.textContent = originalText;
                 button.disabled = false;
-            }, 1000);
+            }, (error) => {
+                alert('Failed to send message. Please try again later.');
+                console.error('EmailJS error:', error);
+                button.textContent = originalText;
+                button.disabled = false;
+            });
         });
     </script>
 </body>
