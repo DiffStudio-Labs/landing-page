@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-pt-28">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,9 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 </head>
 <body class="font-poppins text-white gradient-bg min-h-screen">
     <header class="fixed w-full z-50 glass-effect py-2">
@@ -19,57 +19,75 @@
                 <img src="./images/logo.png" alt="DiffStudio Logo" class="h-24 w-auto object-contain hover:opacity-90 transition-opacity">
             </div>
             <nav class="hidden md:flex space-x-6">
-                <a href="#home" class="hover:text-indigo-300 transition">Home</a>
-                <a href="#about" class="hover:text-indigo-300 transition">About</a>
-                <a href="#features" class="hover:text-indigo-300 transition">Features</a>
-                <a href="#contact" class="hover:text-indigo-300 transition">Contact</a>
+                <a href="#home" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Home</a>
+                <a href="#about" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">About</a>
+                <a href="#features" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Features</a>
+                <a href="#contact" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Contact</a>
             </nav>
             <button class="md:hidden text-2xl">☰</button>
         </div>
     </header>
 
     <main>
-        <section id="home" class="min-h-screen flex items-center justify-center pt-20">
-            <div class="container mx-auto px-6 text-center">
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">⁠See It, Spin It, Shop It</h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">3D Shopping for the Modern Buyer!</p>
-                <a href="#contact" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full transition">Get Started</a>
-            </div>
-        </section>
-
-        <section id="about" class="justify-center py-20">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl font-semibold mb-6">Our Mission</h2>
-                <div class="max-w-2xl mx-auto">
-                    <p class="text-lg mb-4">At DiffStudio, we're revolutionizing eCommerce by empowering businesses with immersive 3D product experiences that boost engagement and sales.</p>
-                    <p class="text-lg">Using Gaussian splatting technology, we create stunning, interactive displays that reduce returns and elevate conversions.</p>
+        <section id="home" class="min-h-screen flex items-center justify-center pt-28">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="text-center md:text-left">
+                        <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in text-white drop-shadow-md">
+                            Splat Your Products into 3D Glory
+                        </h1>
+                        <p class="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-sm">3D Shopping for the Modern Buyer!</p>
+                        <a href="#contact" class="inline-block bg-[#438eb5] hover:bg-[#78c3af] text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-md">
+                            Get Started
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <img src="./images/3d-product.jpg" alt="3D Product Example" class="w-full h-auto rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-[#3f2e74] to-transparent opacity-50 rounded-lg"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="features" class="py-20 bg-gray-900/50">
-            <div class="container mx-auto px-6">
-                <h2 class="text-4xl font-semibold text-center mb-12">Why DiffStudio?</h2>
+        <section id="about" class="justify-center py-20 pt-28 relative">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h2 class="text-4xl font-semibold mb-6 text-white drop-shadow-md">Our Mission</h2>
+                <div class="max-w-2xl mx-auto">
+                    <p class="text-lg mb-4 text-gray-100 drop-shadow-sm">At DiffStudio, we're revolutionizing eCommerce by empowering businesses with immersive 3D product experiences that boost engagement and sales.</p>
+                    <p class="text-lg text-gray-100 drop-shadow-sm">Using Gaussian splatting technology, we create stunning, interactive displays that reduce returns and elevate conversions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-20 pt-28 relative">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <h2 class="text-4xl font-semibold text-center mb-12 text-white drop-shadow-md">Why DiffStudio?</h2>
                 <div id="feature-cards"></div>
             </div>
         </section>
 
-        <section id="contact" class="py-20">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl font-semibold mb-6">Ready to Join us?</h2>
-                <p class="text-lg mb-8 max-w-xl mx-auto">Contact us to see how DiffStudio can transform your product displays.</p>
+        <section id="contact" class="py-20 pt-28 relative">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h2 class="text-4xl font-semibold mb-6 text-white drop-shadow-md">Ready to Join us?</h2>
+                <p class="text-lg mb-8 max-w-xl mx-auto text-gray-100 drop-shadow-sm">Contact us to see how DiffStudio can transform your product displays.</p>
                 <form id="contactForm" class="max-w-md mx-auto glass-effect p-6 rounded-lg">
-                    <input type="text" placeholder="Name" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required>
-                    <input type="email" placeholder="Email" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required>
-                    <textarea placeholder="Message" rows="4" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required></textarea>
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full transition">Send Message</button>
+                    <label for="name" class="block mb-2 text-gray-200">Name</label>
+                    <input type="text" id="name" placeholder="Name" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required>
+                    <label for="email" class="block mb-2 text-gray-200">Email</label>
+                    <input type="email" id="email" placeholder="Email" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required>
+                    <label for="message" class="block mb-2 text-gray-200">Message</label>
+                    <textarea id="message" placeholder="Message" rows="4" class="w-full p-3 mb-4 rounded-lg bg-transparent border border-gray-300 text-white" required></textarea>
+                    <button type="submit" class="bg-[#438eb5] hover:bg-[#78c3af] text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-md">Send Message</button>
                 </form>
             </div>
         </section>
     </main>
 
-    <footer class="py-10 text-center glass-effect">
-        <p>&copy; 2025 DiffStudio Labs LLC. All rights reserved.</p>
+    <footer class="py-10 text-center glass-effect bg-gradient-to-r from-[#3f2e74] to-[#438eb5]">
+        <p class="text-gray-200 drop-shadow-sm">© 2025 DiffStudio Labs LLC. All rights reserved.</p>
     </footer>
 
     <script type="text/babel">
@@ -79,12 +97,13 @@
             { icon: "fas fa-chart-line", title: "High Impact", desc: "Boost engagement with interactive displays." }
         ];
 
-        function FeatureCard({ feature }) {
+        function FeatureCard({ feature, index }) {
+            const colors = ['#e74052', '#78c3af', '#f3b062'];
             return (
-                <div className="p-8 glass-effect rounded-lg hover:scale-105 transition flex flex-col items-center text-center h-full">
-                    <i className={`${feature.icon} text-5xl text-indigo-400 mb-6`}></i>
-                    <h3 className="text-2xl font-semibold mb-3">{feature.title}</h3>
-                    <p className="text-base">{feature.desc}</p>
+                <div className="p-8 glass-effect rounded-lg shadow-lg hover:scale-105 transition flex flex-col items-center text-center h-full">
+                    <i className={`${feature.icon} text-5xl mb-6 drop-shadow-md`} style={{ color: colors[index % colors.length] }}></i>
+                    <h3 className="text-2xl font-semibold mb-3 text-white drop-shadow-sm">{feature.title}</h3>
+                    <p className="text-base text-gray-100 drop-shadow-sm">{feature.desc}</p>
                 </div>
             );
         }
@@ -93,45 +112,73 @@
             return (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
                     {features.map((feature, index) => (
-                        <FeatureCard key={index} feature={feature} />
+                        <FeatureCard key={index} feature={feature} index={index} />
                     ))}
                 </div>
             );
         }
 
-        // Replace ReactDOM.render with createRoot
         const root = ReactDOM.createRoot(document.getElementById('feature-cards'));
         root.render(<FeatureList />);
 
+        (function() {
+            emailjs.init("yXW6dOUMMhBYkTH05"); 
+        })();
+
         document.getElementById('contactForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Get form data
             const form = e.target;
-            const name = form.querySelector('input[type="text"]').value;
-            const email = form.querySelector('input[type="email"]').value;
-            const message = form.querySelector('textarea').value;
-            
-            // Simple validation
+            const name = form.querySelector('input[type="text"]').value.trim();
+            const email = form.querySelector('input[type="email"]').value.trim();
+            const message = form.querySelector('textarea').value.trim();
+
+            // Enhanced validation
             if (!name || !email || !message) {
                 alert('Please fill out all fields');
                 return;
             }
-            
-            // Show loading state
+
+            // Name validation
+            if (name.length < 2) {
+                alert('Name must be at least 2 characters long');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            // Message validation
+            if (message.length < 10) {
+                alert('Message must be at least 10 characters long');
+                return;
+            }
+
             const button = form.querySelector('button');
             const originalText = button.textContent;
             button.textContent = 'Sending...';
             button.disabled = true;
-            
-            // Simulate API call (replace with actual API call)
-            setTimeout(() => {
-                console.log('Form submitted with:', { name, email, message });
+
+            emailjs.send("service_5jj1zzu", "template_2g033mt", {
+                from_name: name,     // Maps to {{from_name}} in the template
+                email: email,        // Maps to {{email}} in the template
+                message: message,    // Maps to {{message}} in the template
+                to_name: "DiffStudio"  // Maps to {{to_name}} in the template
+            })
+            .then(() => {
                 alert(`Thank you ${name} for contacting us! We'll get back to you soon.`);
                 form.reset();
                 button.textContent = originalText;
                 button.disabled = false;
-            }, 1000);
+            }, (error) => {
+                alert('Failed to send message. Please try again later.');
+                console.error('EmailJS error:', error);
+                button.textContent = originalText;
+                button.disabled = false;
+            });
         });
     </script>
 </body>
