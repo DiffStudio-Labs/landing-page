@@ -1,4 +1,4 @@
-function initContactForm() {
+export function initContactForm() {
     emailjs.init("yXW6dOUMMhBYkTH05");
 
     document.getElementById('contactForm').addEventListener('submit', handleSubmit);
