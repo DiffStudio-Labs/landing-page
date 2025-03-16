@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-28">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,7 @@
     <script type="module" src="js/components/Slider.js"></script>
     <script type="module" src="js/components/FeatureCards.js"></script>
     <script type="module" src="js/components/config.js"></script>
+    <script type="module" src="js/components/ContactForm.js"></script>
 </head>
 <body class="font-poppins text-white gradient-bg min-h-screen">
     <header class="fixed w-full z-50 glass-effect py-2">
@@ -23,48 +24,65 @@
             </div>
             <nav class="hidden md:flex space-x-6">
                 <a href="#home" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Home</a>
+                <a href="#demo" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Demo</a>
                 <a href="#about" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">About</a>
                 <a href="#features" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Features</a>
                 <a href="#contact" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Contact</a>
             </nav>
-            <button class="md:hidden text-2xl">☰</button>
+            <button id="mobile-menu-button" class="md:hidden text-2xl" aria-label="Toggle menu">☰</button>
+        </div>
+        <!-- Mobile navigation menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full glass-effect py-4 shadow-lg">
+            <nav class="flex flex-col space-y-4 container mx-auto px-4">
+                <a href="#home" class="py-2 px-4 hover:bg-white/10 rounded-lg transition-all">Home</a>
+                <a href="#demo" class="py-2 px-4 hover:bg-white/10 rounded-lg transition-all">Demo</a>
+                <a href="#about" class="py-2 px-4 hover:bg-white/10 rounded-lg transition-all">About</a>
+                <a href="#features" class="py-2 px-4 hover:bg-white/10 rounded-lg transition-all">Features</a>
+                <a href="#contact" class="py-2 px-4 hover:bg-white/10 rounded-lg transition-all">Contact</a>
+            </nav>
         </div>
     </header>
 
     <main>
-        <section id="home" class="min-h-screen flex items-center justify-center pt-28">
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center justify-center pt-28 scroll-mt-header">
             <div class="container mx-auto px-6">
-                <div class="flex flex-col gap-8 items-center">
-                    <div class="text-center max-w-3xl">
-                        <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in text-white drop-shadow-md">
-                            Splat Your Products into 3D Glory
-                        </h1>
-                        <p class="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-sm">3D Shopping for the Modern Buyer!</p>
-                        <a href="#contact" class="inline-block bg-[#438eb5] hover:bg-[#78c3af] text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-md">
-                            Get Started
-                        </a>
-                    </div>
-                    <div class="w-full max-w-6xl relative">
-                        <div class="aspect-square rounded-lg overflow-hidden shadow-lg glass-effect max-w-3xl mx-auto">
-                            <div id="slider" class="relative w-full h-full flex items-center">
-                                <button 
-                                    class="absolute left-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
-                                    onclick="window.slider.prevSlide()">
-                                    <i class="fas fa-chevron-left text-xl"></i>
-                                </button>
-                                <button 
-                                    class="absolute right-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
-                                    onclick="window.slider.nextSlide()">
-                                    <i class="fas fa-chevron-right text-xl"></i>
-                                </button>
-                            </div>
+                <div class="text-center max-w-3xl mx-auto">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in text-white drop-shadow-md">
+                        Splat Your Products into 3D Glory
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-sm">3D Shopping for the Modern Buyer!</p>
+                    <a href="#demo" class="inline-block bg-[#438eb5] hover:bg-[#78c3af] text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-md">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Section -->
+        <section id="demo" class="min-h-screen flex items-center justify-center">
+            <div class="container mx-auto px-6 text-center pt-16"> <!-- Added pt-16 for header offset -->
+                <h2 class="text-4xl font-semibold mb-12 text-white drop-shadow-md mt-4">See It in Action</h2>
+                <div class="w-full max-w-6xl mx-auto relative">
+                    <div class="aspect-square rounded-lg overflow-hidden shadow-lg glass-effect max-w-3xl mx-auto">
+                        <div id="slider" class="relative w-full h-full flex items-center">
+                            <button 
+                                class="absolute left-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
+                                onclick="window.slider.prevSlide()">
+                                <i class="fas fa-chevron-left text-xl"></i>
+                            </button>
+                            <button 
+                                class="absolute right-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
+                                onclick="window.slider.nextSlide()">
+                                <i class="fas fa-chevron-right text-xl"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="about" class="justify-center py-20 pt-28 relative">
+        <section id="about" class="min-h-screen flex items-center justify-center scroll-mt-header">
             <div class="absolute inset-0"></div>
             <div class="container mx-auto px-6 text-center relative z-10">
                 <h2 class="text-4xl font-semibold mb-6 text-white drop-shadow-md">Our Mission</h2>
@@ -75,7 +93,7 @@
             </div>
         </section>
 
-        <section id="features" class="py-20 pt-28 relative">
+        <section id="features" class="py-20 pt-28 relative scroll-mt-header">
             <div class="absolute inset-0"></div>
             <div class="container mx-auto px-6 relative z-10">
                 <h2 class="text-4xl font-semibold text-center mb-12 text-white drop-shadow-md">Why DiffStudio?</h2>
@@ -83,7 +101,7 @@
             </div>
         </section>
 
-        <section id="contact" class="py-20 pt-28 relative">
+        <section id="contact" class="py-20 pt-28 relative scroll-mt-header">
             <div class="absolute inset-0"></div>
             <div class="container mx-auto px-6 text-center relative z-10">
                 <h2 class="text-4xl font-semibold mb-6 text-white drop-shadow-md">Ready to Join us?</h2>
@@ -127,14 +145,41 @@
         import { Slider } from './js/components/Slider.js';
         import { FeatureList } from './js/components/FeatureCards.js';
         import { viewerConfig } from './js/components/config.js';
+        import { initContactForm } from './js/components/ContactForm.js';
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', () => {
+                const isMenuOpen = mobileMenu.classList.toggle('hidden');
+                mobileMenuButton.textContent = isMenuOpen ? '☰' : '✕';
+            });
+            
+            // Close mobile menu when clicking a link
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButton.textContent = '☰';
+                });
+            });
+            
+            // Close mobile menu when resizing to desktop view
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) { // md breakpoint
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButton.textContent = '☰';
+                }
+            });
+            
+            // Initialize other components
             window.slider = new Slider('slider', {
-                viewers: viewerConfig.viewers // Use config viewers
+                viewers: viewerConfig.viewers
             });
             const root = ReactDOM.createRoot(document.getElementById('feature-cards'));
             root.render(React.createElement(FeatureList));
-            initContactForm(); // Assuming this is defined elsewhere
+            initContactForm();
         });
     </script>
     <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9211010f9cc74525',t:'MTc0MjA5NDA2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
