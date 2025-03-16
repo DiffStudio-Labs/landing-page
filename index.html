@@ -173,15 +173,46 @@
                 }
             });
             
-            // Initialize other components
-            window.slider = new Slider('slider', {
-                viewers: viewerConfig.viewers
+            // Improved smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+                        
+                        // Scroll to element with header offset
+                        window.scrollTo({
+                            top: targetPosition - headerHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             });
-            const root = ReactDOM.createRoot(document.getElementById('feature-cards'));
-            root.render(React.createElement(FeatureList));
-            initContactForm();
+            
+            // Initialize components
+            try {
+                // Initialize slider
+                window.slider = new Slider('slider', {
+                    viewers: viewerConfig.viewers
+                });
+                
+                // Initialize feature cards
+                const featureCardsElement = document.getElementById('feature-cards');
+                if (featureCardsElement) {
+                    const root = ReactDOM.createRoot(featureCardsElement);
+                    root.render(React.createElement(FeatureList));
+                }
+                
+                // Initialize contact form
+                initContactForm();
+            } catch (error) {
+                console.error('Error initializing components:', error);
+            }
         });
     </script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9211010f9cc74525',t:'MTc0MjA5NDA2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

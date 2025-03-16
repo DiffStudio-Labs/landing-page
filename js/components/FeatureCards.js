@@ -1,4 +1,3 @@
-// js/components/FeatureCards.js
 const features = [
     { icon: "fas fa-cube", title: "Advanced 3D Scanning", desc: "High-quality 3D models with Gaussian splatting." },
     { icon: "fas fa-mobile-alt", title: "User-Friendly", desc: "Intuitive interface for seamless scanning." },

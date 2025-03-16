@@ -63,3 +63,9 @@ iframe {
         scroll-margin-top: 4rem;
     }
 }
+
+a[href="#demo"].inline-block {
+    pointer-events: auto !important;
+    z-index: 1000 !important;
+    position: relative;
+}
