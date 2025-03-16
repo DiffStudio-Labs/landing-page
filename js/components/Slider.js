@@ -9,8 +9,6 @@ export class Slider {
         this.loadingSlides = new Set();
         this.unloadTimeouts = new Map();
         this.unloadDelay = 5000;
-        this.autoAdvanceDelay = options.autoAdvanceDelay || null;
-        this.autoAdvanceInterval = null;
 
         if (!this.container) {
             console.error(`Slider container with ID "${containerId}" not found`);
@@ -26,13 +24,19 @@ export class Slider {
             this.container.innerHTML = '<p>No 3D viewers available</p>';
             return;
         }
-        // Clear existing content and set up the slider structure
-        this.container.innerHTML = '';
-        
-        // Create slides container
-        this.slidesContainer = document.createElement('div');
-        this.slidesContainer.className = 'slides-container relative w-full h-full';
-        this.container.appendChild(this.slidesContainer);
+
+        // Preserve existing buttons by not clearing the entire container
+        // Instead, clear or create the slides and dots containers specifically
+        let slidesContainer = this.container.querySelector('.slides-container');
+        if (!slidesContainer) {
+            slidesContainer = document.createElement('div');
+            slidesContainer.className = 'slides-container relative w-full h-full';
+            // Insert before the buttons (assumes buttons are direct children)
+            this.container.insertBefore(slidesContainer, this.container.querySelector('button'));
+        } else {
+            slidesContainer.innerHTML = '';
+        }
+        this.slidesContainer = slidesContainer;
 
         // Generate slide containers
         this.slideContainers = [];
@@ -46,10 +50,16 @@ export class Slider {
             this.slideContainers.push(slide);
         });
 
-        // Create dots navigation container
-        this.dotsContainer = document.createElement('div');
-        this.dotsContainer.className = 'absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20';
-        this.container.appendChild(this.dotsContainer);
+        // Create or update dots navigation container
+        let dotsContainer = this.container.querySelector('.dots-container');
+        if (!dotsContainer) {
+            dotsContainer = document.createElement('div');
+            dotsContainer.className = 'absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20 dots-container';
+            this.container.appendChild(dotsContainer);
+        } else {
+            dotsContainer.innerHTML = '';
+        }
+        this.dotsContainer = dotsContainer;
 
         // Generate dots
         this.dots = [];
@@ -63,15 +73,6 @@ export class Slider {
 
         // Load the first slide
         this.loadIframe(this.slideContainers[0], this.viewers[0]);
-
-        // Start auto-advance if delay is set
-        if (this.autoAdvanceDelay) {
-            this.startAutoAdvance();
-        }
-
-        // Add mouse event listeners to pause/resume auto-advance
-        this.container.addEventListener('mouseenter', () => this.pauseAutoAdvance());
-        this.container.addEventListener('mouseleave', () => this.resumeAutoAdvance());
     }
 
     loadIframe(container, src) {
@@ -159,37 +160,13 @@ export class Slider {
         this.showSlide(index);
     }
 
-    startAutoAdvance() {
-        if (this.autoAdvanceDelay && !this.autoAdvanceInterval) {
-            this.autoAdvanceInterval = setInterval(() => this.nextSlide(), this.autoAdvanceDelay);
-        }
-    }
-
-    pauseAutoAdvance() {
-        if (this.autoAdvanceInterval) {
-            clearInterval(this.autoAdvanceInterval);
-            this.autoAdvanceInterval = null;
-        }
-    }
-
-    resumeAutoAdvance() {
-        if (this.autoAdvanceDelay) {
-            this.startAutoAdvance();
-        }
-    }
-
     destroy() {
-        this.pauseAutoAdvance();
-        
         this.slideContainers.forEach(container => {
             if (this.unloadTimeouts.has(container)) {
                 clearTimeout(this.unloadTimeouts.get(container));
             }
             this.unloadIframe(container);
         });
-        
         this.unloadTimeouts.clear();
-        this.container.removeEventListener('mouseenter', () => this.pauseAutoAdvance());
-        this.container.removeEventListener('mouseleave', () => this.resumeAutoAdvance());
     }
 }

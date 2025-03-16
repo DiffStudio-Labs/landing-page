@@ -41,3 +41,8 @@ iframe {
     height: 100%;
     display: block; 
 }
+
+#feature-cards {
+    width: 100%;
+    max-width: 100%;
+}

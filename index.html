@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script type="module" src="js/components/Slider.js"></script>
     <script type="module" src="js/components/FeatureCards.js"></script>
+    <script type="module" src="js/components/config.js"></script>
 </head>
 <body class="font-poppins text-white gradient-bg min-h-screen">
     <header class="fixed w-full z-50 glass-effect py-2">
@@ -78,7 +79,7 @@
             <div class="absolute inset-0"></div>
             <div class="container mx-auto px-6 relative z-10">
                 <h2 class="text-4xl font-semibold text-center mb-12 text-white drop-shadow-md">Why DiffStudio?</h2>
-                <div id="feature-cards"></div>
+                <div id="feature-cards" class="w-full"></div>
             </div>
         </section>
 
@@ -124,12 +125,18 @@
 
     <script type="module">
         import { Slider } from './js/components/Slider.js';
-        
+        import { FeatureList } from './js/components/FeatureCards.js';
+        import { viewerConfig } from './js/components/config.js';
+
         document.addEventListener('DOMContentLoaded', () => {
             window.slider = new Slider('slider', {
-                autoAdvanceDelay: 5000  // Advance every 5 seconds
+                viewers: viewerConfig.viewers // Use config viewers
             });
+            const root = ReactDOM.createRoot(document.getElementById('feature-cards'));
+            root.render(React.createElement(FeatureList));
+            initContactForm(); // Assuming this is defined elsewhere
         });
     </script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9211010f9cc74525',t:'MTc0MjA5NDA2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
