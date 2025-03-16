@@ -16,3 +16,5 @@ yarn.lock
 .env.production.local
 coverage/
 .nyc_output
+
+.vscode/
