@@ -1,4 +1,3 @@
-// js/components/Slider.js
 import { viewerConfig } from './config.js';
 
 export class Slider {
