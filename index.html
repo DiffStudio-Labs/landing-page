@@ -23,6 +23,7 @@
             </div>
             <nav class="hidden md:flex space-x-6">
                 <a href="#home" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Home</a>
+                <a href="#demo" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Demo</a>
                 <a href="#about" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">About</a>
                 <a href="#features" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Features</a>
                 <a href="#contact" class="hover:text-[#f1a255] hover:border-b-2 hover:border-[#e74052] transition-all">Contact</a>
@@ -32,32 +33,38 @@
     </header>
 
     <main>
+        <!-- Hero Section -->
         <section id="home" class="min-h-screen flex items-center justify-center pt-28">
             <div class="container mx-auto px-6">
-                <div class="flex flex-col gap-8 items-center">
-                    <div class="text-center max-w-3xl">
-                        <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in text-white drop-shadow-md">
-                            Splat Your Products into 3D Glory
-                        </h1>
-                        <p class="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-sm">3D Shopping for the Modern Buyer!</p>
-                        <a href="#contact" class="inline-block bg-[#438eb5] hover:bg-[#78c3af] text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-md">
-                            Get Started
-                        </a>
-                    </div>
-                    <div class="w-full max-w-6xl relative">
-                        <div class="aspect-square rounded-lg overflow-hidden shadow-lg glass-effect max-w-3xl mx-auto">
-                            <div id="slider" class="relative w-full h-full flex items-center">
-                                <button 
-                                    class="absolute left-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
-                                    onclick="window.slider.prevSlide()">
-                                    <i class="fas fa-chevron-left text-xl"></i>
-                                </button>
-                                <button 
-                                    class="absolute right-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
-                                    onclick="window.slider.nextSlide()">
-                                    <i class="fas fa-chevron-right text-xl"></i>
-                                </button>
-                            </div>
+                <div class="text-center max-w-3xl mx-auto">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in text-white drop-shadow-md">
+                        Splat Your Products into 3D Glory
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow-sm">3D Shopping for the Modern Buyer!</p>
+                    <a href="#demo" class="inline-block bg-[#438eb5] hover:bg-[#78c3af] text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-md">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Section -->
+        <section id="demo" class="py-20 pt-28">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-semibold mb-12 text-white drop-shadow-md">See It in Action</h2>
+                <div class="w-full max-w-6xl mx-auto relative">
+                    <div class="aspect-square rounded-lg overflow-hidden shadow-lg glass-effect max-w-3xl mx-auto">
+                        <div id="slider" class="relative w-full h-full flex items-center">
+                            <button 
+                                class="absolute left-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
+                                onclick="window.slider.prevSlide()">
+                                <i class="fas fa-chevron-left text-xl"></i>
+                            </button>
+                            <button 
+                                class="absolute right-4 z-20 bg-black/50 text-white p-4 rounded-full hover:bg-black/75 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 pointer-events-auto"
+                                onclick="window.slider.nextSlide()">
+                                <i class="fas fa-chevron-right text-xl"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
