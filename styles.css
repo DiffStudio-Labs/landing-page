@@ -20,6 +20,11 @@
     );
 }
 
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+}
 
 .slides-container {
     position: relative;
@@ -45,4 +50,10 @@ iframe {
 #feature-cards {
     width: 100%;
     max-width: 100%;
+}
+
+@layer utilities {
+    .scroll-mt-header {
+        scroll-margin-top: 4rem;
+    }
 }
