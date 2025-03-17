@@ -8,6 +8,7 @@ export class Slider {
         this.loadingSlides = new Set();
         this.unloadTimeouts = new Map();
         this.unloadDelay = 5000;
+        this.isFullscreen = false;
 
         if (!this.container) {
             console.error(`Slider container with ID "${containerId}" not found`);
@@ -15,6 +16,128 @@ export class Slider {
         }
 
         this.init();
+        
+        // Add postMessage listener for iOS fullscreen support
+        window.addEventListener('message', this.handleMessage = (event) => {
+            // Only process messages from our iframe viewers
+            const currentIframe = this.getCurrentIframe();
+            if (!currentIframe || event.source !== currentIframe.contentWindow) {
+                return;
+            }
+            
+            console.log('Message received from iframe:', event.data);
+            
+            if (event.data === 'requestFullscreen') {
+                this.handleFullscreen(true);
+            } else if (event.data === 'exitFullscreen') {
+                this.handleFullscreen(false);
+            }
+        });
+    }
+
+    getCurrentIframe() {
+        const currentContainer = this.slideContainers[this.currentSlide];
+        return currentContainer ? currentContainer.querySelector('iframe') : null;
+    }
+    
+    handleFullscreen(enterFullscreen) {
+        const iframe = this.getCurrentIframe();
+        
+        if (!iframe) {
+            console.error('No active iframe found');
+            return;
+        }
+        
+        if (enterFullscreen && !this.isFullscreen) {
+            console.log('Entering fullscreen mode');
+            
+            // Create a new fullscreen container
+            const fullscreenContainer = document.createElement('div');
+            fullscreenContainer.className = 'fullscreen-container';
+            fullscreenContainer.style.position = 'fixed';
+            fullscreenContainer.style.top = '0';
+            fullscreenContainer.style.left = '0';
+            fullscreenContainer.style.width = '100vw';
+            fullscreenContainer.style.height = '100vh';
+            fullscreenContainer.style.backgroundColor = 'black';
+            fullscreenContainer.style.zIndex = '9999';
+            document.body.appendChild(fullscreenContainer);
+            
+            // Clone the iframe
+            const fullscreenIframe = document.createElement('iframe');
+            fullscreenIframe.src = iframe.src;
+            fullscreenIframe.style.width = '100%';
+            fullscreenIframe.style.height = '100%';
+            fullscreenIframe.style.border = 'none';
+            fullscreenIframe.allow = 'fullscreen; xr-spatial-tracking';
+            
+            // Store the original iframe for later reference
+            this.originalIframe = iframe;
+            this.fullscreenContainer = fullscreenContainer;
+            this.fullscreenIframe = fullscreenIframe;
+            
+            // Append the cloned iframe to the fullscreen container
+            fullscreenContainer.appendChild(fullscreenIframe);
+            
+            // Store original body overflow
+            this.originalBodyOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            
+            // Add close button
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '✕';
+            closeBtn.style.position = 'fixed';
+            closeBtn.style.top = '20px';
+            closeBtn.style.right = '20px';
+            closeBtn.style.zIndex = '10000';
+            closeBtn.style.background = 'rgba(0, 0, 0, 0.6)';
+            closeBtn.style.color = 'white';
+            closeBtn.style.border = 'none';
+            closeBtn.style.borderRadius = '50%';
+            closeBtn.style.width = '40px';
+            closeBtn.style.height = '40px';
+            closeBtn.style.fontSize = '20px';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.onclick = () => this.handleFullscreen(false);
+            fullscreenContainer.appendChild(closeBtn);
+            this.closeButton = closeBtn;
+            
+            this.isFullscreen = true;
+            
+            // Wait for the iframe to load and then send fullscreenEntered message
+            fullscreenIframe.onload = () => {
+                try {
+                    fullscreenIframe.contentWindow.postMessage('fullscreenEntered', '*');
+                    console.log('Sent fullscreenEntered message to new iframe');
+                } catch (err) {
+                    console.error('Failed to send message to new iframe:', err);
+                }
+            };
+            
+        } else if (!enterFullscreen && this.isFullscreen) {
+            console.log('Exiting fullscreen mode');
+            
+            // Remove the fullscreen container and all its children
+            if (this.fullscreenContainer) {
+                document.body.removeChild(this.fullscreenContainer);
+                this.fullscreenContainer = null;
+                this.fullscreenIframe = null;
+                this.closeButton = null;
+            }
+            
+            // Restore body overflow
+            document.body.style.overflow = this.originalBodyOverflow || '';
+            
+            // Tell the original iframe we've exited fullscreen mode
+            try {
+                iframe.contentWindow.postMessage('fullscreenExited', '*');
+                console.log('Sent fullscreenExited message to original iframe');
+            } catch (err) {
+                console.error('Failed to send message to iframe:', err);
+            }
+            
+            this.isFullscreen = false;
+        }
     }
 
     init() {
@@ -31,7 +154,12 @@ export class Slider {
             slidesContainer = document.createElement('div');
             slidesContainer.className = 'slides-container relative w-full h-full';
             // Insert before the buttons (assumes buttons are direct children)
-            this.container.insertBefore(slidesContainer, this.container.querySelector('button'));
+            const firstButton = this.container.querySelector('button');
+            if (firstButton) {
+                this.container.insertBefore(slidesContainer, firstButton);
+            } else {
+                this.container.appendChild(slidesContainer);
+            }
         } else {
             slidesContainer.innerHTML = '';
         }
@@ -116,6 +244,11 @@ export class Slider {
     showSlide(index) {
         if (index === this.currentSlide) return;
 
+        // Exit fullscreen if active when changing slides
+        if (this.isFullscreen) {
+            this.handleFullscreen(false);
+        }
+
         this.slideContainers.forEach((container, i) => {
             if (i === index) {
                 container.style.opacity = '1';
@@ -167,5 +300,15 @@ export class Slider {
             this.unloadIframe(container);
         });
         this.unloadTimeouts.clear();
+        
+        // Clean up fullscreen if active
+        if (this.isFullscreen) {
+            this.handleFullscreen(false);
+        }
+        
+        // Remove message event listeners
+        if (this.handleMessage) {
+            window.removeEventListener('message', this.handleMessage);
+        }
     }
 }
