@@ -21,7 +21,13 @@ export class Slider {
         window.addEventListener('message', this.handleMessage = (event) => {
             // Only process messages from our iframe viewers
             const currentIframe = this.getCurrentIframe();
-            if (!currentIframe || event.source !== currentIframe.contentWindow) {
+            const fullscreenIframe = this.fullscreenIframe;
+            
+            // Check if message is from either the current iframe or fullscreen iframe
+            const isFromCurrentIframe = currentIframe && event.source === currentIframe.contentWindow;
+            const isFromFullscreenIframe = fullscreenIframe && event.source === fullscreenIframe.contentWindow;
+            
+            if (!isFromCurrentIframe && !isFromFullscreenIframe) {
                 return;
             }
             
@@ -57,10 +63,11 @@ export class Slider {
             fullscreenContainer.style.position = 'fixed';
             fullscreenContainer.style.top = '0';
             fullscreenContainer.style.left = '0';
-            fullscreenContainer.style.width = '100vw';
-            fullscreenContainer.style.height = '100vh';
+            fullscreenContainer.style.width = '100%';  // Changed from 100vw
+            fullscreenContainer.style.height = '100%'; // Changed from 100vh
             fullscreenContainer.style.backgroundColor = 'black';
             fullscreenContainer.style.zIndex = '9999';
+            fullscreenContainer.style.overflow = 'hidden'; // Prevent scrollbars
             document.body.appendChild(fullscreenContainer);
             
             // Clone the iframe
@@ -69,6 +76,10 @@ export class Slider {
             fullscreenIframe.style.width = '100%';
             fullscreenIframe.style.height = '100%';
             fullscreenIframe.style.border = 'none';
+            fullscreenIframe.style.margin = '0';
+            fullscreenIframe.style.padding = '0';
+            fullscreenIframe.style.display = 'block'; // Ensure proper display
+            fullscreenIframe.style.overflow = 'hidden'; // Prevent scrollbars within iframe
             fullscreenIframe.allow = 'fullscreen; xr-spatial-tracking';
             
             // Store the original iframe for later reference
@@ -79,30 +90,25 @@ export class Slider {
             // Append the cloned iframe to the fullscreen container
             fullscreenContainer.appendChild(fullscreenIframe);
             
-            // Store original body overflow
+            // Store original body overflow and prevent scrolling
             this.originalBodyOverflow = document.body.style.overflow;
+            this.originalBodyPosition = document.body.style.position;
             document.body.style.overflow = 'hidden';
-            
-            // Add close button
-            const closeBtn = document.createElement('button');
-            closeBtn.innerHTML = '✕';
-            closeBtn.style.position = 'fixed';
-            closeBtn.style.top = '20px';
-            closeBtn.style.right = '20px';
-            closeBtn.style.zIndex = '10000';
-            closeBtn.style.background = 'rgba(0, 0, 0, 0.6)';
-            closeBtn.style.color = 'white';
-            closeBtn.style.border = 'none';
-            closeBtn.style.borderRadius = '50%';
-            closeBtn.style.width = '40px';
-            closeBtn.style.height = '40px';
-            closeBtn.style.fontSize = '20px';
-            closeBtn.style.cursor = 'pointer';
-            closeBtn.onclick = () => this.handleFullscreen(false);
-            fullscreenContainer.appendChild(closeBtn);
-            this.closeButton = closeBtn;
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            document.body.style.height = '100%';
             
             this.isFullscreen = true;
+            
+            // Handle window resize to ensure iframe always fits perfectly
+            this.resizeHandler = () => {
+                if (this.fullscreenContainer) {
+                    // Ensure container fits exactly in the viewport
+                    this.fullscreenContainer.style.width = '100%';
+                    this.fullscreenContainer.style.height = '100%';
+                }
+            };
+            window.addEventListener('resize', this.resizeHandler);
             
             // Wait for the iframe to load and then send fullscreenEntered message
             fullscreenIframe.onload = () => {
@@ -117,16 +123,24 @@ export class Slider {
         } else if (!enterFullscreen && this.isFullscreen) {
             console.log('Exiting fullscreen mode');
             
+            // Remove resize handler
+            if (this.resizeHandler) {
+                window.removeEventListener('resize', this.resizeHandler);
+                this.resizeHandler = null;
+            }
+            
             // Remove the fullscreen container and all its children
             if (this.fullscreenContainer) {
                 document.body.removeChild(this.fullscreenContainer);
                 this.fullscreenContainer = null;
                 this.fullscreenIframe = null;
-                this.closeButton = null;
             }
             
-            // Restore body overflow
+            // Restore body styles
             document.body.style.overflow = this.originalBodyOverflow || '';
+            document.body.style.position = this.originalBodyPosition || '';
+            document.body.style.width = '';
+            document.body.style.height = '';
             
             // Tell the original iframe we've exited fullscreen mode
             try {
@@ -139,7 +153,6 @@ export class Slider {
             this.isFullscreen = false;
         }
     }
-
     init() {
         if (this.viewers.length === 0) {
             console.error('No viewers defined in config');
