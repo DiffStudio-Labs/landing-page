@@ -8,6 +8,7 @@ export class Slider {
         this.loadingSlides = new Set();
         this.unloadTimeouts = new Map();
         this.unloadDelay = 5000;
+        this.isFullscreen = false;
 
         if (!this.container) {
             console.error(`Slider container with ID "${containerId}" not found`);
@@ -15,6 +16,134 @@ export class Slider {
         }
 
         this.init();
+        
+        window.addEventListener('message', this.handleMessage = (event) => {
+            const currentIframe = this.getCurrentIframe();
+            const fullscreenIframe = this.fullscreenIframe;
+            
+            const isFromCurrentIframe = currentIframe && event.source === currentIframe.contentWindow;
+            const isFromFullscreenIframe = fullscreenIframe && event.source === fullscreenIframe.contentWindow;
+            
+            if (!isFromCurrentIframe && !isFromFullscreenIframe) {
+                return;
+            }
+            
+            console.log('Message received from iframe:', event.data);
+            
+            if (event.data === 'requestFullscreen') {
+                this.handleFullscreen(true);
+            } else if (event.data === 'exitFullscreen') {
+                this.handleFullscreen(false);
+            }
+        });
+    }
+
+    getCurrentIframe() {
+        const currentContainer = this.slideContainers[this.currentSlide];
+        return currentContainer ? currentContainer.querySelector('iframe') : null;
+    }
+    
+    handleFullscreen(enterFullscreen) {
+        const iframe = this.getCurrentIframe();
+        
+        if (!iframe) {
+            console.error('No active iframe found');
+            return;
+        }
+        
+        if (enterFullscreen && !this.isFullscreen) {
+            console.log('Entering fullscreen mode');
+            
+            const fullscreenContainer = document.createElement('div');
+            fullscreenContainer.className = 'fullscreen-container';
+            fullscreenContainer.style.position = 'fixed';
+            fullscreenContainer.style.top = '0';
+            fullscreenContainer.style.left = '0';
+            fullscreenContainer.style.width = '100%';
+            fullscreenContainer.style.height = '100%';
+            fullscreenContainer.style.backgroundColor = 'black';
+            fullscreenContainer.style.zIndex = '9999';
+            fullscreenContainer.style.overflow = 'hidden';
+            document.body.appendChild(fullscreenContainer);
+            
+            const fullscreenIframe = document.createElement('iframe');
+            
+            const iframeSrc = new URL(iframe.src);
+            iframeSrc.searchParams.set('alreadyFullscreen', 'true');
+            
+            fullscreenIframe.src = iframeSrc.toString();
+            fullscreenIframe.style.width = '100%';
+            fullscreenIframe.style.height = '100%';
+            fullscreenIframe.style.border = 'none';
+            fullscreenIframe.style.margin = '0';
+            fullscreenIframe.style.padding = '0';
+            fullscreenIframe.style.display = 'block';
+            fullscreenIframe.style.overflow = 'hidden';
+            fullscreenIframe.allow = 'fullscreen; xr-spatial-tracking';
+            
+            this.originalIframe = iframe;
+            this.fullscreenContainer = fullscreenContainer;
+            this.fullscreenIframe = fullscreenIframe;
+            
+            fullscreenContainer.appendChild(fullscreenIframe);
+            
+            this.originalBodyOverflow = document.body.style.overflow;
+            this.originalBodyPosition = document.body.style.position;
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            document.body.style.height = '100%';
+            
+            this.isFullscreen = true;
+            
+            this.resizeHandler = () => {
+                if (this.fullscreenContainer) {
+                    this.fullscreenContainer.style.width = '100%';
+                    this.fullscreenContainer.style.height = '100%';
+                }
+            };
+            window.addEventListener('resize', this.resizeHandler);
+            
+            this.escKeyHandler = (event) => {
+                if (event.key === 'Escape' && this.isFullscreen) {
+                    this.handleFullscreen(false);
+                }
+            };
+            document.addEventListener('keydown', this.escKeyHandler);
+            
+        } else if (!enterFullscreen && this.isFullscreen) {
+            console.log('Exiting fullscreen mode');
+            
+            if (this.resizeHandler) {
+                window.removeEventListener('resize', this.resizeHandler);
+                this.resizeHandler = null;
+            }
+            
+            if (this.escKeyHandler) {
+                document.removeEventListener('keydown', this.escKeyHandler);
+                this.escKeyHandler = null;
+            }
+            
+            if (this.fullscreenContainer) {
+                document.body.removeChild(this.fullscreenContainer);
+                this.fullscreenContainer = null;
+                this.fullscreenIframe = null;
+            }
+            
+            document.body.style.overflow = this.originalBodyOverflow || '';
+            document.body.style.position = this.originalBodyPosition || '';
+            document.body.style.width = '';
+            document.body.style.height = '';
+            
+            try {
+                iframe.contentWindow.postMessage('fullscreenExited', '*');
+                console.log('Sent fullscreenExited message to original iframe');
+            } catch (err) {
+                console.error('Failed to send message to iframe:', err);
+            }
+            
+            this.isFullscreen = false;
+        }
     }
 
     init() {
@@ -24,20 +153,21 @@ export class Slider {
             return;
         }
 
-        // Preserve existing buttons by not clearing the entire container
-        // Instead, clear or create the slides and dots containers specifically
         let slidesContainer = this.container.querySelector('.slides-container');
         if (!slidesContainer) {
             slidesContainer = document.createElement('div');
             slidesContainer.className = 'slides-container relative w-full h-full';
-            // Insert before the buttons (assumes buttons are direct children)
-            this.container.insertBefore(slidesContainer, this.container.querySelector('button'));
+            const firstButton = this.container.querySelector('button');
+            if (firstButton) {
+                this.container.insertBefore(slidesContainer, firstButton);
+            } else {
+                this.container.appendChild(slidesContainer);
+            }
         } else {
             slidesContainer.innerHTML = '';
         }
         this.slidesContainer = slidesContainer;
 
-        // Generate slide containers
         this.slideContainers = [];
         this.viewers.forEach((_, index) => {
             const slide = document.createElement('div');
@@ -49,7 +179,6 @@ export class Slider {
             this.slideContainers.push(slide);
         });
 
-        // Create or update dots navigation container
         let dotsContainer = this.container.querySelector('.dots-container');
         if (!dotsContainer) {
             dotsContainer = document.createElement('div');
@@ -60,7 +189,6 @@ export class Slider {
         }
         this.dotsContainer = dotsContainer;
 
-        // Generate dots
         this.dots = [];
         this.viewers.forEach((_, index) => {
             const dot = document.createElement('button');
@@ -70,7 +198,6 @@ export class Slider {
             this.dots.push(dot);
         });
 
-        // Load the first slide
         this.loadIframe(this.slideContainers[0], this.viewers[0]);
     }
 
@@ -116,6 +243,10 @@ export class Slider {
     showSlide(index) {
         if (index === this.currentSlide) return;
 
+        if (this.isFullscreen) {
+            this.handleFullscreen(false);
+        }
+
         this.slideContainers.forEach((container, i) => {
             if (i === index) {
                 container.style.opacity = '1';
@@ -158,7 +289,7 @@ export class Slider {
     goToSlide(index) {
         this.showSlide(index);
     }
-
+    
     destroy() {
         this.slideContainers.forEach(container => {
             if (this.unloadTimeouts.has(container)) {
@@ -167,5 +298,21 @@ export class Slider {
             this.unloadIframe(container);
         });
         this.unloadTimeouts.clear();
+        
+        if (this.isFullscreen) {
+            this.handleFullscreen(false);
+        }
+        
+        if (this.handleMessage) {
+            window.removeEventListener('message', this.handleMessage);
+        }
+        
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
+        
+        if (this.escKeyHandler) {
+            document.removeEventListener('keydown', this.escKeyHandler);
+        }
     }
 }

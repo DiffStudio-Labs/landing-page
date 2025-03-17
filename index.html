@@ -31,7 +31,6 @@
             </nav>
             <button id="mobile-menu-button" class="md:hidden text-2xl" aria-label="Toggle menu">☰</button>
         </div>
-        <!-- Mobile navigation menu -->
         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full glass-effect py-4 shadow-lg">
             <nav class="flex flex-col space-y-4 container mx-auto px-4">
                 <a href="#home" class="py-2 px-4 hover:bg-white/10 rounded-lg transition-all">Home</a>
@@ -44,7 +43,6 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section id="home" class="min-h-screen flex items-center justify-center pt-28 scroll-mt-header">
             <div class="container mx-auto px-6">
                 <div class="text-center max-w-3xl mx-auto">
@@ -59,9 +57,8 @@
             </div>
         </section>
 
-        <!-- Demo Section -->
         <section id="demo" class="min-h-screen flex items-center justify-center">
-            <div class="container mx-auto px-6 text-center pt-16"> <!-- Added pt-16 for header offset -->
+            <div class="container mx-auto px-6 text-center pt-16"> 
                 <h2 class="text-4xl font-semibold mb-12 text-white drop-shadow-md mt-4">See It in Action</h2>
                 <div class="w-full max-w-6xl mx-auto relative">
                     <div class="aspect-square rounded-lg overflow-hidden shadow-lg glass-effect max-w-3xl mx-auto">
@@ -148,7 +145,6 @@
         import { initContactForm } from './js/components/ContactForm.js';
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile menu toggle functionality
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             
@@ -157,7 +153,6 @@
                 mobileMenuButton.textContent = isMenuOpen ? '☰' : '✕';
             });
             
-            // Close mobile menu when clicking a link
             document.querySelectorAll('#mobile-menu a').forEach(link => {
                 link.addEventListener('click', () => {
                     mobileMenu.classList.add('hidden');
